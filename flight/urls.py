@@ -1,6 +1,6 @@
-from django.urls import path, include
+from django.urls import re_path, include
 from flight import views
 
 urlpatterns = [
-    path("", views.index, name="index"),
+    re_path(r'index/', views.index)
 ]
