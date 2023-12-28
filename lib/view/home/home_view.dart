@@ -142,7 +142,7 @@ class _HomeViewState extends State<HomeView> {
         selectedArrivalTime.value =
             DateFormat('MMMM dd, yyyy hh:mm a').format(dateTimeArr);
 
-        log('arrival: ${selectedArrivalTime.value}');
+        // log('arrival: ${selectedArrivalTime.value}');
       });
     }
   }
@@ -665,7 +665,27 @@ class _HomeViewState extends State<HomeView> {
               Center(
                 child: ElevatedButton(
                   onPressed: () {
-                    if (departureController.text != '' &&
+                    log(
+                        'dep: ${departureController.text} '
+                        'arr: ${arrivalController.text} '
+                        'dp: ${departTimeController.text} '
+                        'p: ${passengerSeatController.text} '
+                        'login: ${isLogin.value}',
+                        name: 'debug-input');
+
+                    if (departureController.text.isEmpty &&
+                        arrivalController.text.isEmpty &&
+                        departTimeController.text.isEmpty &&
+                        passengerSeatController.text.isEmpty &&
+                        isLogin.value == true || isLogin.value == false) {
+                      Get.snackbar(
+                        'Lion Air Booking App',
+                        'Please fill all the form first!',
+                        colorText: Colors.white,
+                        backgroundColor: Colors.redAccent.withOpacity(0.6),
+                        borderRadius: 8.r,
+                      );
+                    } else if (departureController.text != '' &&
                         arrivalController.text != '' &&
                         departTimeController.text != '' &&
                         passengerSeatController.text != '' &&
@@ -689,18 +709,6 @@ class _HomeViewState extends State<HomeView> {
                         'Registration Success! Your ticket is ready, bon voyage!',
                         colorText: kPrimaryColor,
                         backgroundColor: kSecondaryColor,
-                        borderRadius: 8.r,
-                      );
-                    } else if (departureController.text != '' &&
-                        arrivalController.text != '' &&
-                        departTimeController.text != '' &&
-                        passengerSeatController.text != '' &&
-                        isLogin.value == true) {
-                      Get.snackbar(
-                        'Lion Air Booking App',
-                        'Please fill all the form first!',
-                        colorText: Colors.white,
-                        backgroundColor: Colors.redAccent.withOpacity(0.6),
                         borderRadius: 8.r,
                       );
                     }
