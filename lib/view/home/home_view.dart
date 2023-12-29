@@ -22,6 +22,7 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   final HomeController _homeController = Get.find();
+  final ScrollController _controller = ScrollController();
 
   final TextEditingController departureController = TextEditingController();
   final TextEditingController arrivalController = TextEditingController();
@@ -147,6 +148,22 @@ class _HomeViewState extends State<HomeView> {
     }
   }
 
+  void scrollDownToTicket() {
+    _controller.animateTo(
+      _controller.position.maxScrollExtent,
+      duration: const Duration(seconds: 2),
+      curve: Curves.fastEaseInToSlowEaseOut,
+    );
+  }
+
+  void scrollUpToBook() {
+    _controller.animateTo(
+      _controller.position.minScrollExtent,
+      duration: const Duration(seconds: 2),
+      curve: Curves.fastLinearToSlowEaseIn,
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -179,19 +196,23 @@ class _HomeViewState extends State<HomeView> {
               Row(
                 children: [
                   GestureDetector(
-                    onTap: () {},
+                    onTap: scrollUpToBook,
                     child: const Text(
                       'Home',
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
                   SizedBox(width: 8.w),
-                  GestureDetector(
-                    onTap: () {},
-                    child: const Text(
-                      'Special Offers',
-                      style: TextStyle(color: Colors.white),
-                    ),
+                  Obx(
+                    () => isLogin.value && isOrdered.value
+                        ? GestureDetector(
+                            onTap: scrollDownToTicket,
+                            child: const Text(
+                              'My Ticket',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          )
+                        : Container(),
                   ),
                 ],
               ),
@@ -224,6 +245,7 @@ class _HomeViewState extends State<HomeView> {
         ),
       ),
       body: SingleChildScrollView(
+        controller: _controller,
         child: Container(
           margin: EdgeInsets.symmetric(horizontal: 56.w),
           width: 1.sw,
@@ -295,7 +317,7 @@ class _HomeViewState extends State<HomeView> {
                       )
                     : const SizedBox(),
               ),
-              SizedBox(height: 24.h),
+              SizedBox(height: 32.h),
             ],
           ),
         ),
@@ -674,10 +696,11 @@ class _HomeViewState extends State<HomeView> {
                         name: 'debug-input');
 
                     if (departureController.text.isEmpty &&
-                        arrivalController.text.isEmpty &&
-                        departTimeController.text.isEmpty &&
-                        passengerSeatController.text.isEmpty &&
-                        isLogin.value == true || isLogin.value == false) {
+                            arrivalController.text.isEmpty &&
+                            departTimeController.text.isEmpty &&
+                            passengerSeatController.text.isEmpty &&
+                            isLogin.value == true ||
+                        isLogin.value == false) {
                       Get.snackbar(
                         'Lion Air Booking App',
                         'Please fill all the form first!',
@@ -734,6 +757,10 @@ class _HomeViewState extends State<HomeView> {
         ),
       ),
     );
+  }
+
+  Widget buildSpecialOffer() {
+    return Container();
   }
 
   void _showDepartureAirportDialog() {
